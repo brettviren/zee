@@ -1,0 +1,52 @@
+## Automatically generated from zee_client.xml by gsl
+digraph "zee_client" {
+ "connected" -> "defaults" [style=dotted,arrowhead=empty]
+ "expect later" -> "defaults" [style=dotted,arrowhead=empty]
+
+ "start" [shape = "doublecircle"];
+ "start connect" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">connect</font></td></tr><tr><td align="left" port="r3">signal connected</td></tr><tr><td align="left" port="r3">use connect timeout</td></tr></table>>];
+ "start" -> "start connect";
+ "start connect" -> "connected";
+ "start bad endpoint" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">bad endpoint</font></td></tr><tr><td align="left" port="r3">signal bad endpoint</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "start" -> "start bad endpoint";
+ "start bad endpoint" -> "start";
+ "start destructor" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">destructor</font></td></tr><tr><td align="left" port="r3">signal success</td></tr></table>>];
+ "start" -> "start destructor";
+ "start destructor" -> "start";
+
+ "connected" [shape = "doublecircle"];
+ "connected yodel" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">yodel</font></td></tr><tr><td align="left" port="r3">signal success</td></tr><tr><td align="left" port="r3">send (yodel)</td></tr></table>>];
+ "connected" -> "connected yodel";
+ "connected yodel" -> "connected";
+ "connected echo" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">echo</font></td></tr><tr><td align="left" port="r3">signal echo</td></tr></table>>];
+ "connected" -> "connected echo";
+ "connected echo" -> "connected";
+
+ "expect later" [shape = "doublecircle"];
+ "expect later later" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">later</font></td></tr><tr><td align="left" port="r3">signal success</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "expect later" -> "expect later later";
+ "expect later later" -> "expect later";
+ "expect later *" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">*</font></td></tr></table>>];
+ "expect later" -> "expect later *";
+ "expect later *" -> "expect later";
+
+ "defaults" [shape = "doublecircle"];
+ "defaults destructor" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">destructor</font></td></tr><tr><td align="left" port="r3">send (goodbye)</td></tr></table>>];
+ "defaults" -> "defaults destructor";
+ "defaults destructor" -> "expect later";
+ "defaults expired" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">expired</font></td></tr><tr><td align="left" port="r3">check if connection is dead</td></tr><tr><td align="left" port="r3">send (ping)</td></tr></table>>];
+ "defaults" -> "defaults expired";
+ "defaults expired" -> "defaults";
+ "defaults pong" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">pong</font></td></tr><tr><td align="left" port="r3">client is connected</td></tr></table>>];
+ "defaults" -> "defaults pong";
+ "defaults pong" -> "defaults";
+ "defaults error" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">error</font></td></tr><tr><td align="left" port="r3">check status code</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "defaults" -> "defaults error";
+ "defaults error" -> "defaults";
+ "defaults exception" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">exception</font></td></tr></table>>];
+ "defaults" -> "defaults exception";
+ "defaults exception" -> "defaults";
+ "defaults *" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">*</font></td></tr><tr><td align="left" port="r3">signal internal error</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "defaults" -> "defaults *";
+ "defaults *" -> "defaults";
+}

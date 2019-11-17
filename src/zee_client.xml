@@ -1,0 +1,99 @@
+<class
+    name = "zee_client"
+    title = "ZeroMQ Echo Example Client"
+    script = "zproto_client_c"
+    protocol_class = "zee_proto"
+    package_dir = "../include"
+    project_header = "zee_classes.h"
+    >
+
+  <state name = "start">
+    <event name = "connect" next = "connected" >
+      <action name = "signal connected" />
+      <action name = "use connect timeout" />
+    </event>
+    <event name = "bad endpoint">
+      <action name = "signal bad endpoint" />
+      <action name = "terminate" />
+    </event>
+    <event name = "destructor">
+      <action name = "signal success" />
+    </event>
+  </state>
+
+  <state name = "connected" inherit = "defaults">
+    <event name = "yodel" >
+      <action name = "signal success"/>
+      <action name = "send" message = "YODEL"/>
+    </event>
+    <event name = "ECHO" >
+      <action name = "signal echo"/>
+    </event>
+
+  </state>
+
+  <state name = "expect later" inherit = "defaults">
+    <event name = "LATER">
+      <action name = "signal success" />
+      <action name = "terminate" />
+    </event>
+    <event name = "*">
+      <!-- Ignore anything else the server may send us -->
+    </event>
+  </state>
+
+  <state name = "defaults">
+    <event name = "destructor" next = "expect later">
+      <action name = "send" message = "GOODBYE" />
+    </event>
+    <event name = "expired">
+      <action name = "check if connection is dead" />
+      <action name = "send" message = "PING" />
+    </event>
+    <event name = "PONG">
+      <action name = "client is connected" />
+    </event>    
+    <event name = "ERROR">
+      <action name = "check status code" />
+      <action name = "terminate" />
+    </event>
+    <event name = "exception">
+      <!-- Generic exception event to interrupt actions -->
+    </event>
+    <event name = "*">
+      <action name = "signal internal error" />
+      <action name = "terminate" />
+    </event>
+  </state>    
+
+  <method name = "connect" return = "status">
+    <field name = "endpoint" type = "string" />
+    <field name = "timeout" type = "number" size = "4" />
+    <accept reply = "CONNECTED" />
+    <accept reply = "FAILURE" />
+  </method>
+
+  <method name = "destructor" return = "status">
+    <accept reply = "SUCCESS" />
+    <accept reply = "FAILURE" />
+  </method>
+
+  <method name = "yodel" return = "status">
+    <field name = "payload" type = "string" />
+    <accept reply = "SUCCESS" />
+  </method>
+
+  <reply name = "CONNECTED">
+    <field name = "status" type = "integer" />
+  </reply>
+
+  <reply name = "SUCCESS">
+    <field name = "status" type = "integer" />
+  </reply>
+
+  <reply name = "FAILURE">
+    <field name = "status" type = "integer" />
+    <field name = "reason" type = "string" />
+  </reply>
+
+</class>

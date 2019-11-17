@@ -1,0 +1,23 @@
+## Automatically generated from zee_server.xml by gsl
+digraph "zee_server" {
+
+ "start" [shape = "doublecircle"];
+ "start yodel" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">yodel</font></td></tr><tr><td align="left" port="r3">send (echo)</td></tr></table>>];
+ "start" -> "start yodel";
+ "start yodel" -> "start";
+ "start ping" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">ping</font></td></tr><tr><td align="left" port="r3">send (pong)</td></tr></table>>];
+ "start" -> "start ping";
+ "start ping" -> "start";
+ "start goodbye" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">goodbye</font></td></tr><tr><td align="left" port="r3">send (later)</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "start" -> "start goodbye";
+ "start goodbye" -> "start";
+ "start expired" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">expired</font></td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "start" -> "start expired";
+ "start expired" -> "start";
+ "start exception" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">exception</font></td></tr><tr><td align="left" port="r3">send (error)</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "start" -> "start exception";
+ "start exception" -> "start";
+ "start *" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">*</font></td></tr><tr><td align="left" port="r3">signal command invalid</td></tr><tr><td align="left" port="r3">send (error)</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
+ "start" -> "start *";
+ "start *" -> "start";
+}

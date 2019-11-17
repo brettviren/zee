@@ -1,0 +1,37 @@
+<class
+    name = "zee_proto"
+    title = "The ZeroMQ Echo Example Protocol"
+    script = "zproto_codec_c"
+    package_dir = "../include"
+    >
+    <include filename = "../license.xml" />
+
+    <grammar>
+    zee = *( convo | heartbeat ) [ goodbye ]
+    convo = C:YODEL S:ECHO
+    heartbeat = C:PING S:PONG
+    goodbye = C:GOODBYE S:LATER
+    </grammar>
+
+    <message name = "YODEL">
+      Shout into the void.
+      <field name = "payload" type = "string"/>
+    </message>
+
+    <message name = "ECHO">
+      The void shouts into you.
+      <field name = "payload" type = "string" />
+    </message>
+
+    <message name = "PING"/>
+    <message name = "PONG"/>
+    <message name = "GOODBYE"/>
+    <message name = "LATER"/>
+
+    <message name = "ERROR">
+      <field name = "status" type = "number" size = "2">3-digit status code</field>
+      <field name = "reason" type = "string">Printable explanation</field>
+    </message>
+
+
+</class>

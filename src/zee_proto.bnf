@@ -1,0 +1,46 @@
+The following ABNF grammar defines the The ZeroMQ Echo Example Protocol:
+
+    zee = *( convo | heartbeat ) [ goodbye ]
+    convo = C:YODEL S:ECHO
+    heartbeat = C:PING S:PONG
+    goodbye = C:GOODBYE S:LATER
+
+    ;  Shout into the void.
+
+    YODEL           = signature %d1 payload
+    signature       = %xAA %xA0             ; two octets
+    payload         = string                ;
+
+    ;  The void shouts into you.
+
+    ECHO            = signature %d2 payload
+    payload         = string                ;
+
+    ;  No description
+
+    PING            = signature %d3
+
+    ;  No description
+
+    PONG            = signature %d4
+
+    ;  No description
+
+    GOODBYE         = signature %d5
+
+    ;  No description
+
+    LATER           = signature %d6
+
+    ;  No description
+
+    ERROR           = signature %d7 status reason
+    status          = number-2              ; 3-digit status code
+    reason          = string                ; Printable explanation
+
+    ; Strings are always length + text contents
+    string          = number-1 *VCHAR
+
+    ; Numbers are unsigned integers in network byte order
+    number-1        = 1OCTET
+    number-2        = 2OCTET

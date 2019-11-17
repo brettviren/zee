@@ -1,0 +1,19 @@
+<project 
+    name = "zee"
+    description = "ZeroMQ echo example"
+    script = "zproject.gsl"
+    email = "brett.viren@gmail.com"
+    >
+    <include filename = "license.xml" />
+    <version major = "0" minor = "0" patch = "0" />
+    
+    <use project = "czmq"/>
+
+    <class name = "zee_proto" />
+    <class name = "zee_server" />
+    <class name = "zee_client" />
+    
+    <model name = "zee_proto" />
+    <model name = "zee_server" />
+    <model name = "zee_client" />
+</project>

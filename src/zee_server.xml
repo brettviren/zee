@@ -1,0 +1,40 @@
+<class
+    name = "zee_server"
+    title = "ZeroMQ Echo Example Server"
+    script = "zproto_server_c"
+    protocol_class = "zee_proto"
+    package_dir = "../include"
+    project_header = "zee_classes.h"
+    >
+    <include filename = "../license.xml" />
+
+    <state name = "start">
+      <event name = "YODEL">
+        <action name = "send" message = "ECHO"/>
+      </event>
+      <event name = "PING">
+        <action name = "send" message = "PONG" />
+      </event>
+      <event name = "GOODBYE">
+        <action name = "send" message = "LATER" />
+        <action name = "terminate" />
+      </event>
+
+      <event name = "expired">
+        <action name = "terminate" />
+      </event>
+      <!-- Client tried to do something we don't allow yet -->
+      <event name = "exception">
+        <action name = "send" message = "ERROR" />
+        <action name = "terminate" />
+      </event>
+      <!-- All other protocol messages are invalid -->
+      <event name = "*">
+        <action name = "signal command invalid" />
+        <action name = "send" message = "ERROR" />
+        <action name = "terminate" />
+      </event>
+
+    </state>
+
+</class>

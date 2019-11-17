@@ -116,6 +116,8 @@ static int
 static void
     s_satisfy_pedantic_compilers (void);
 static void
+    connect_to_server_endpoint (client_t *self);
+static void
     signal_connected (client_t *self);
 static void
     use_connect_timeout (client_t *self);
@@ -123,6 +125,8 @@ static void
     signal_bad_endpoint (client_t *self);
 static void
     signal_success (client_t *self);
+static void
+    set_payload (client_t *self);
 static void
     signal_echo (client_t *self);
 static void
@@ -382,6 +386,12 @@ s_client_execute (s_client_t *self, event_t event)
             case start_state:
                 if (self->event == connect_event) {
                     if (!self->exception) {
+                        //  connect to server endpoint
+                        if (self->verbose)
+                            zsys_debug ("%s:         $ connect to server endpoint", self->log_prefix);
+                        connect_to_server_endpoint (&self->client);
+                    }
+                    if (!self->exception) {
                         //  signal connected
                         if (self->verbose)
                             zsys_debug ("%s:         $ signal connected", self->log_prefix);
@@ -433,10 +443,10 @@ s_client_execute (s_client_t *self, event_t event)
             case connected_state:
                 if (self->event == yodel_event) {
                     if (!self->exception) {
-                        //  signal success
+                        //  set payload
                         if (self->verbose)
-                            zsys_debug ("%s:         $ signal success", self->log_prefix);
-                        signal_success (&self->client);
+                            zsys_debug ("%s:         $ set payload", self->log_prefix);
+                        set_payload (&self->client);
                     }
                     if (!self->exception) {
                         //  send YODEL
@@ -445,6 +455,12 @@ s_client_execute (s_client_t *self, event_t event)
                                 self->log_prefix);
                         zee_proto_set_id (self->message, ZEE_PROTO_YODEL);
                         zee_proto_send (self->message, self->dealer);
+                    }
+                    if (!self->exception) {
+                        //  signal success
+                        if (self->verbose)
+                            zsys_debug ("%s:         $ signal success", self->log_prefix);
+                        signal_success (&self->client);
                     }
                 }
                 else

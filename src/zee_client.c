@@ -62,6 +62,7 @@ client_terminate (client_t *self)
 void
 zee_client_test (bool verbose)
 {
+    zsys_init();
     printf (" * zee_client: ");
     if (verbose)
         printf ("\n");
@@ -69,7 +70,7 @@ zee_client_test (bool verbose)
     zactor_t* server = zactor_new(zee_server, "zee-server");
     if (verbose)
         zstr_send(server, "VERBOSE");
-    zstr_sendx(server, "BIND", "ipc://@/zee", NULL);
+    zstr_sendx(server, "BIND", "ipc://@/zee_server", NULL);
 
     //  @selftest
     // TODO: fill this out
@@ -77,13 +78,14 @@ zee_client_test (bool verbose)
     assert(client);
     zee_client_set_verbose(client, verbose);
 
-    int rc = zee_client_connect(client, "ipc://@/zee", 500);
+    int rc = zee_client_connect(client, "ipc://@/zee_server", 500);
     assert(rc == 0);
 
     rc = zee_client_yodel(client, "Seek and you shall know");
     assert (rc == 0);
 
     zee_client_destroy (&client);
+    zactor_destroy (&server);
     //  @end
     printf ("OK\n");
 }
@@ -190,4 +192,29 @@ static void
 signal_connected (client_t *self)
 {
     zsock_send (self->cmdpipe, "si", "CONNECTED", 0);
+}
+
+
+//  ---------------------------------------------------------------------------
+//  set_payload
+//
+
+static void
+set_payload (client_t *self)
+{
+    zee_proto_set_payload(self->message, self->args->payload);
+}
+
+
+//  ---------------------------------------------------------------------------
+//  connect_to_server_endpoint
+//
+
+static void
+connect_to_server_endpoint (client_t *self)
+{
+    if (zsock_connect (self->dealer, "%s", self->args->endpoint)) {
+        engine_set_exception (self, bad_endpoint_event);
+        zsys_warning ("could not connect to %s", self->args->endpoint);
+    }
 }

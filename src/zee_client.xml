@@ -9,6 +9,7 @@
 
   <state name = "start">
     <event name = "connect" next = "connected" >
+      <action name = "connect to server endpoint" />
       <action name = "signal connected" />
       <action name = "use connect timeout" />
     </event>
@@ -23,8 +24,9 @@
 
   <state name = "connected" inherit = "defaults">
     <event name = "yodel" >
-      <action name = "signal success"/>
+      <action name = "set payload"/>
       <action name = "send" message = "YODEL"/>
+      <action name = "signal success"/>
     </event>
     <event name = "ECHO" >
       <action name = "signal echo"/>

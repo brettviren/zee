@@ -4,7 +4,7 @@ digraph "zee_client" {
  "expect later" -> "defaults" [style=dotted,arrowhead=empty]
 
  "start" [shape = "doublecircle"];
- "start connect" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">connect</font></td></tr><tr><td align="left" port="r3">signal connected</td></tr><tr><td align="left" port="r3">use connect timeout</td></tr></table>>];
+ "start connect" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">connect</font></td></tr><tr><td align="left" port="r3">connect to server endpoint</td></tr><tr><td align="left" port="r3">signal connected</td></tr><tr><td align="left" port="r3">use connect timeout</td></tr></table>>];
  "start" -> "start connect";
  "start connect" -> "connected";
  "start bad endpoint" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">bad endpoint</font></td></tr><tr><td align="left" port="r3">signal bad endpoint</td></tr><tr><td align="left" port="r3">terminate</td></tr></table>>];
@@ -15,7 +15,7 @@ digraph "zee_client" {
  "start destructor" -> "start";
 
  "connected" [shape = "doublecircle"];
- "connected yodel" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">yodel</font></td></tr><tr><td align="left" port="r3">signal success</td></tr><tr><td align="left" port="r3">send (yodel)</td></tr></table>>];
+ "connected yodel" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">yodel</font></td></tr><tr><td align="left" port="r3">set payload</td></tr><tr><td align="left" port="r3">send (yodel)</td></tr><tr><td align="left" port="r3">signal success</td></tr></table>>];
  "connected" -> "connected yodel";
  "connected yodel" -> "connected";
  "connected echo" [shape = "Mrecord" style = solid label = <<table border="0" cellborder="0" cellpadding="3" bgcolor="white"><tr><td bgcolor="black" align="center" colspan="2"><font color="white">echo</font></td></tr><tr><td align="left" port="r3">signal echo</td></tr></table>>];

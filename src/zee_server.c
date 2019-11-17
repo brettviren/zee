@@ -120,6 +120,7 @@ client_terminate (client_t *self)
 void
 zee_server_test (bool verbose)
 {
+    zsys_init();
     printf (" * zee_server: ");
     if (verbose)
         printf ("\n");
@@ -137,6 +138,14 @@ zee_server_test (bool verbose)
 
     //  TODO: fill this out
     zee_proto_t *request = zee_proto_new ();
+    zee_proto_set_id(request, ZEE_PROTO_YODEL);
+    zee_proto_set_payload(request, "Seek and ye shall find");
+    zee_proto_send(request, client);
+    zee_proto_recv(request, client);
+    assert (zee_proto_id(request) == ZEE_PROTO_ECHO);
+    if (verbose)
+        zee_proto_print(request);
+
     zee_proto_destroy (&request);
 
     zsock_destroy (&client);

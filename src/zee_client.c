@@ -84,6 +84,13 @@ zee_client_test (bool verbose)
     rc = zee_client_yodel(client, "Seek and you shall know");
     assert (rc == 0);
 
+    zsock_t* msgpipe = zee_client_msgpipe(client);
+    char* payload=0;
+    zsock_recv(msgpipe, "ss", NULL, &payload);
+    assert(payload);
+    if (verbose)
+        zsys_debug("\n\n\t%s\n", payload);
+
     zee_client_destroy (&client);
     zactor_destroy (&server);
     //  @end
